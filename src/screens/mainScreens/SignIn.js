@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { moderateScale } from "react-native-size-matters";
 import { Fontisto } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,11 +11,24 @@ import { Feather } from "@expo/vector-icons";
 
 
 const SignIn = () => {
- 
-  const [isFocused, setIsFocused] = useState(false);
+  const navigation = useNavigation();
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+
+  const [isCursorVisible, setIsCursorVisible] = useState(true);
+
+  useEffect(() => {
+    // Toggle cursor visibility every 500 milliseconds
+    const interval = setInterval(() => {
+      setIsCursorVisible((prev) => !prev);
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
 
    const handleGooglePressed = () =>{
     console.log("handleGooglePressed");
@@ -28,6 +41,7 @@ const SignIn = () => {
    const handleSignIn = (email, password) =>{
     console.log("email:", email,"password:", password);
    }
+
 
 
   return (
@@ -53,7 +67,7 @@ const SignIn = () => {
                 marginBottom: moderateScale(20),
                 marginTop: moderateScale(10),
               },
-              isFocused && {
+              isEmailFocused && {
                 borderWidth: 0.8,
                 borderColor: "lightgray",
               },
@@ -76,10 +90,11 @@ const SignIn = () => {
               }}
             >
               <TextInput
+              
                 value={email}
                 onChangeText={(newEmail) => setEmail(newEmail)}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
+                onFocus={()=>setIsEmailFocused(true)}
+                onBlur={() => setIsEmailFocused(false)}
                 style={{
                   flex: 1,
                   position: "relative",
@@ -87,7 +102,8 @@ const SignIn = () => {
                   zIndex: 0,
                   height: "100%",
                 }}
-                caretHidden={true}
+                caretHidden={!isCursorVisible}
+                caretColor="lightgray" 
               />
               {email == "" && (
                 <Text
@@ -116,7 +132,7 @@ const SignIn = () => {
                 marginBottom: moderateScale(20),
                 marginTop: moderateScale(10),
               },
-              isFocused && {
+             isPasswordFocused && {
                 borderWidth: 0.8,
                 borderColor: "lightgray",
               },
@@ -141,8 +157,8 @@ const SignIn = () => {
               <TextInput
                 value={password}
                 onChangeText={(newPassword) => setPassword(newPassword)}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
+                onFocus={()=> setIsPasswordFocused(true)}
+                onBlur={() => setIsPasswordFocused(false)}
                 secureTextEntry={showPassword}
                 style={{
                   flex: 1,
@@ -151,7 +167,8 @@ const SignIn = () => {
                   zIndex: 0,
                   height: "100%",
                 }}
-                caretHidden={true}
+                caretHidden={!isCursorVisible}
+                
               />
               {password == "" && (
                 <Text
