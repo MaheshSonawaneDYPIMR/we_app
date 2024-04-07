@@ -16,7 +16,7 @@ const navigation = useNavigation()
     <View
       style={{
         flex: 1,
-        backgroundColor: "#4F9FA4",
+        backgroundColor: "#6CB4EE",
         position: "relative",
         alignItems: "center",
         justifyContent: "center",
@@ -36,19 +36,21 @@ const navigation = useNavigation()
             fontWeight: "600",
           }}
         >
-          New designs{"\n"}
-          everyday
+          Discover Your {"\n"}
+          Community
         </Text>
         <Text
           style={{
             fontSize: 14,
             fontWeight: "400",
             color: "#F9FAFB",
-            marginTop:moderateScale(20)
+            marginTop:moderateScale(10),
+           
+            alignSelf:'center',
+            marginRight:moderateScale(30)
           }}
         >
-          Shopee adds new designs every day. Explore and find {"\n"} the best
-          furniture for ypur home and offices.
+          Explore diverse groups and discussions on WeApp to find people who resonate with your health experiences and journeys.
         </Text>
         <View style={{ flexDirection: "row" ,marginTop:moderateScale(15)}}>
           <View
@@ -84,11 +86,11 @@ const navigation = useNavigation()
       <Image
         source={Chair}
         style={{
-          width: moderateScale(200),
+          width: moderateScale(350),
           height: moderateScale(350),
           alignSelf: "center",
           position: "absolute",
-          bottom: moderateScale(60),
+          bottom: moderateScale(120),
         }}
       />
       <LinearGradient

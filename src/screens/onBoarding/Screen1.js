@@ -17,7 +17,7 @@ const Screen1 = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#4F9FA4",
+        backgroundColor: "#7CB9E8",
         position: "relative",
         alignItems: "center",
         justifyContent: "center",
@@ -37,19 +37,21 @@ const Screen1 = () => {
             fontWeight: "600",
           }}
         >
-          New designs{"\n"}
-          everyday
+          Welcome to{"\n"}
+          WeApp
         </Text>
         <Text
           style={{
             fontSize: 14,
             fontWeight: "400",
             color: "#F9FAFB",
-            marginTop:moderateScale(20)
+            marginTop:moderateScale(10),
+           
+            alignSelf:'center',
+            marginRight:moderateScale(30)
           }}
         >
-          Shopee adds new designs every day. Explore and find {"\n"} the best
-          furniture for ypur home and offices.
+         WeApp connects you with individuals sharing similar health conditions, fostering support and understanding in a welcoming community.
         </Text>
         <View style={{ flexDirection: "row" ,marginTop:moderateScale(15)}}>
           <View
@@ -88,7 +90,8 @@ const Screen1 = () => {
           height: moderateScale(300),
           alignSelf: "center",
           position: "absolute",
-          bottom: moderateScale(70),
+          bottom: moderateScale(120),
+          
         }}
       />
       <LinearGradient
