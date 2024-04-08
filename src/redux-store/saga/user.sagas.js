@@ -1,12 +1,12 @@
 import { takeEvery, put, takeLatest } from "redux-saga/effects";
-import { Axios } from "axios";
+import Axios  from "axios";
 import { LOGIN_REQUEST, REGISTER_REQUEST } from "../constants/user.constants";
 import { loginFailure, loginSuccess } from "../actions/user.actions";
 
 function* loginUser(action) {
   try {
     console.log("login SAGA");
-    const response = yield Axios.post(`${API_URL}/login`, action.payload);
+    const response = yield Axios.post(`https://weapp-backend.onrender.com/api/v1/user/login`, action.payload);
     console.log("login API response:", response);
     yield put(loginSuccess(response.data));
   } catch (error) {
@@ -19,8 +19,8 @@ function* loginUser(action) {
 function* registerUser(action) {
     try {
         console.log("register saga");
-        const response = yield Axios.post(`${API_URL}/register`, action.payload);
-        console.log("register API response:", response);
+        const response = yield Axios.post(`https://weapp-backend.onrender.com/api/v1/user/register`, action.payload);
+        console.log("register API response:", response.data);
         yield put(loginSuccess(response.data));
     } catch (error) {
         console.log("register user error:", error);

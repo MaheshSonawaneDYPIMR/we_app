@@ -11,6 +11,7 @@ import {
 const initialState = {
   user: null,
   error: null,
+  isLoading: false,
 };
 
 
@@ -21,18 +22,21 @@ const authReducer = (state = initialState, action) => {
         ...state,
         user: action.payload,
         error: null,
+        isLoading: false,
       };
     case LOGIN_FAILURE:
       return {
         ...state,
         user: null,
         error: action.payload,
+        isLoading: false,
       };
     case LOGOUT:
       return {
         ...state,
         user: null,
         error: null,
+        
       };
 
     case REGISTER_REQUEST:

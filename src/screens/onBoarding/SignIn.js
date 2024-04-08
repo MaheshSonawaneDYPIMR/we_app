@@ -11,10 +11,17 @@ import { moderateScale } from "react-native-size-matters";
 import { Fontisto } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import Button from "../../components/Button";
+import Button from "../../components/Button.js";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { loginRequest,loginFailure } from "../../redux-store/actions/user.actions.js";
+import {
+  validateEmail,
+  validateUsername,
+  validatePassword,
+} from "../../utils/validations.utils.js";
 
 const SignIn = () => {
   const navigation = useNavigation();
@@ -23,9 +30,10 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [isCursorVisible, setIsCursorVisible] = useState(true);
-
+const dispatch = useDispatch();
   useEffect(() => {
     // Toggle cursor visibility every 500 milliseconds
     const interval = setInterval(() => {
@@ -44,12 +52,29 @@ const SignIn = () => {
   };
 
   const handleSignIn = (email, password) => {
-    console.log("email:", email, "password:", password);
+    try {
+      
+      const passwordError = validatePassword(password);
+      const emailError = validateEmail(email);
+
+      
+      setPasswordError(passwordError);
+      setEmailError(emailError);
+      console.log(passwordError , emailError);
+      if ( !passwordError && !emailError) {
+        console.log("email:", email, "password:", password);
+        dispatch(loginRequest(email, password))
+      }
+;
+    } catch (error) {
+      console.log("handleSignIn error: " + error);
+      dispatch(loginFailure(error));
+    }
   };
 
   return (
     <View style={{flex:1,backgroundColor:'#ffffff'}}>
-      <View style={{ margin: moderateScale(20), marginTop: moderateScale(90) }}>
+      <View style={{ margin: moderateScale(20), marginTop: moderateScale(70) }}>
         <KeyboardAvoidingView>
           <View>
             <Text style={{ fontSize: 24, fontWeight: "500" }}>Hi there!</Text>
@@ -58,6 +83,7 @@ const SignIn = () => {
             </Text>
           </View>
           <View style={{ marginTop: moderateScale(40) }}>
+            <View>
             <View
               style={[
                 {
@@ -68,12 +94,18 @@ const SignIn = () => {
                   alignItems: "center",
                   backgroundColor: "#F9FAFB",
                   borderRadius: 14,
-                  marginBottom: moderateScale(20),
+                  
                   marginTop: moderateScale(10),
                 },
                 isEmailFocused && {
                   borderWidth: 0.8,
                   borderColor: "lightgray",
+                },
+                emailError && {
+                  borderWidth: 0.8,
+                  borderColor: "red",
+                  marginTop:moderateScale(1)
+
                 },
               ]}
             >
@@ -122,7 +154,12 @@ const SignIn = () => {
                 )}
               </View>
             </View>
-            <View
+            {emailError ? (
+                <Text style={{ color: "red", marginLeft:moderateScale(9),fontSize:12}}>{emailError}</Text>
+              ) : null}
+            </View>
+           <View>
+           <View
               style={[
                 {
                   height: moderateScale(55),
@@ -132,12 +169,17 @@ const SignIn = () => {
                   alignItems: "center",
                   backgroundColor: "#F9FAFB",
                   borderRadius: 14,
-                  marginBottom: moderateScale(20),
+                  
                   marginTop: moderateScale(10),
                 },
                 isPasswordFocused && {
                   borderWidth: 0.8,
                   borderColor: "lightgray",
+                },
+                passwordError && {
+                  borderWidth: 0.8,
+                  marginTop:moderateScale(1),
+                  borderColor: "red",
                 },
               ]}
             >
@@ -200,8 +242,12 @@ const SignIn = () => {
                 />
               </Pressable>
             </View>
+            {passwordError ? (
+                <Text style={{ color: "red", marginLeft:moderateScale(9),fontSize:12}}>{passwordError}</Text>
+              ) : null}
+           </View>
           </View>
-          <View>
+          <View style={{marginTop:moderateScale(10)}}>
             <Text style={{ fontSize: 16, fontWeight: "600" }}>
               Forgot Password?
             </Text>
@@ -292,7 +338,7 @@ const SignIn = () => {
               Don’t have an account?
             </Text>
             <Text style={{ fontSize: 14, fontWeight: "600", color: "#000000" }}>
-              Sign up
+              Sign out
             </Text>
           </Pressable>
         </View>

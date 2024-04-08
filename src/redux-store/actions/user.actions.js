@@ -8,9 +8,9 @@ import {
     LOGIN_SUCCESS,
   } from "../constants/user.constants.js";
   
-  export const registerRequest = (name, email, phone, password) => ({
+  export const registerRequest = (email, username, password ) => ({
     type: REGISTER_REQUEST,
-    payload: {username ,email , password },
+    payload: {email:email, username:username, password:password },
   });
   
   export const registerSuccess = (user) => ({
@@ -26,7 +26,7 @@ import {
   
   export const loginRequest = (email, password) => ({
     type: LOGIN_REQUEST,
-    payload: {username , email, password },
+    payload: {email, password },
   });
   
   export const loginSuccess = (user) => ({
