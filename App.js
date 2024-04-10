@@ -4,31 +4,25 @@ import { StyleSheet } from "react-native";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import MainStackNav from "./src/navigation/MainStackNav";
-import OnBoardingStackNav from "./src/navigation/OnBoardingStackNav";
-import { Provider } from "react-redux";
+
+import { Provider,useDispatch } from 'react-redux';
 import configureStore from "./src/redux-store/store/store";
+import { loginSuccess,refreshTokenRequest } from "./src/redux-store/actions/user.actions";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppNavigation from "./src/navigation/AppNavigation";
+
 
 const store = configureStore();
 const Stack = createStackNavigator();
 
+
+
+
 const App = () => {
+
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="OnBoardingStackNav">
-          <Stack.Screen
-            name="OnBoardingStackNav"
-            component={OnBoardingStackNav}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MainStackNav"
-            component={MainStackNav}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+       <AppNavigation />
     </Provider>
   );
 };

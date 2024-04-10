@@ -108,7 +108,7 @@ const Screen1 = () => {
       />
       <Button
         onPress={() => {
-          navigation.navigate("MainStackNav");
+          navigation.replace("SignIn");
         }}
         label={"Get Started"}
         style={{

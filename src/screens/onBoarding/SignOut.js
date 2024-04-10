@@ -27,8 +27,10 @@ import {
   validatePassword,
 } from "../../utils/validations.utils.js";
 import { LoadingSpinner } from "../../components/LoadingSpinner.js";
+import { AlertBox } from "../../components/AlertBox.js";
 
 const SignOut = () => {
+
   const navigation = useNavigation();
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isUsernameFocused, setIsUsernameFocused] = useState(false);
@@ -41,6 +43,7 @@ const SignOut = () => {
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const { user, error, isLoading } = useSelector((state) => state.auth);
+ 
 
   const dispatch = useDispatch();
 
@@ -54,7 +57,7 @@ const SignOut = () => {
 
   console.log("user", user, "error", error, "isLoding", isLoading);
 
-  const handleSignOut = (email, username, password) => {
+  const handleSignOut =(email, username, password) => {
     try {
       const usernameError = validateUsername(username);
       const passwordError = validatePassword(password);
@@ -74,12 +77,26 @@ const SignOut = () => {
           username
         );
         dispatch(registerRequest(email, username, password));
+       
       }
     } catch (error) {
       console.log("handleSignOut error: " + error);
       dispatch(registerFailure(error));
     }
   };
+
+
+  useEffect(()=>{
+
+    if (error ==="Request failed with status code 500"){
+
+      return AlertBox("Register Failed","Something went wrong while creating user");
+     }
+    if (error ==="Request failed with status code 404"){
+      return AlertBox("unexpected error","something went wrong please try again later after some time.");
+     }
+  },[error])
+  
 
   if (isLoading) {
     return (

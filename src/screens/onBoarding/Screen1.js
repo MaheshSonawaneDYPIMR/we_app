@@ -110,7 +110,7 @@ const Screen1 = () => {
 
       <Pressable
        onPress={() => {
-          navigation.navigate('Screen2')
+        navigation.replace('Screen2')
         }}
         style={{
           position: "absolute",

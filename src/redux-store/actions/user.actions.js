@@ -2,10 +2,16 @@ import {
     REGISTER_FAILURE,
     REGISTER_REQUEST,
     REGISTER_SUCCESS,
+
     LOGOUT,
+
     LOGIN_FAILURE,
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
+
+   REFRESH_ACCESS_TOKEN_FAILURE,
+   REFRESH_ACCESS_TOKEN_REQUEST,
+   REFRESH_ACCESS_TOKEN_SUCCESS
   } from "../constants/user.constants.js";
   
   export const registerRequest = (email, username, password ) => ({
@@ -36,6 +42,20 @@ import {
   
   export const loginFailure = (error) => ({
     type: LOGIN_FAILURE,
+    payload: error,
+  });
+
+  export const refreshTokenRequest = () => ({
+    type:REFRESH_ACCESS_TOKEN_REQUEST,
+  });
+
+  export const refreshTokenSuccess = (token) => ({
+    type: REFRESH_ACCESS_TOKEN_SUCCESS,
+    payload: token,
+  });
+
+  export const refreshTokenFailure = (error) => ({
+    type:REFRESH_ACCESS_TOKEN_FAILURE,
     payload: error,
   });
   
