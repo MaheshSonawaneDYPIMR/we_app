@@ -16,18 +16,37 @@ import { EvilIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../../components/Button";
+import { useSelector,useDispatch } from "react-redux";
+import { postUpdateFailure,postUpdateRequest } from "../../redux-store/actions/user.actions";
 
 export default function App() {
   const navigation = useNavigation();
   // Stores the selected image URI
-  const [file, setFile] = useState(null);
+  const [postPic, setPostPic] = useState("");
   const [showPlaceholder, setShowPlaceholder] = useState(true);
   const [postMsg, setPostMsg] = useState("");
   // Stores any error message
-  const [error, setError] = useState(null);
-  //console.log(postMsg)
-  // Function to pick an image from
-  //the device's media library
+  const [error,setError] = useState(false);
+ 
+  const dispatch = useDispatch();
+  
+  const handlePostUpdate = async () => {
+    try {
+     console.log("postMasg",postMsg ,"postPic",postPic);
+     setPostMsg("")
+     setPostPic("")
+    
+    } catch (error) {
+      console.log("error while posting update",error);
+     
+    }
+   
+  }
+
+  console.log("postMasg",postMsg ,"postPic",postPic);
+
+
+
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -45,8 +64,8 @@ export default function App() {
 
       if (!result.canceled) {
         // If an image is selected (not cancelled),
-        // update the file state variable
-        setFile(result.assets[0].uri);
+        // update the postPic state variable
+        setPostPic(result.assets[0].uri);
         console.log("Image selected", result.assets[0].uri);
         // Clear any previous errors
         setError(null);
@@ -71,6 +90,7 @@ export default function App() {
       keyboardDidHideListener.remove();
     };
   }, []);
+
 
   return (
     <View style={{ backgroundColor: "#ecf3f9", flex: 1 }}>
@@ -123,7 +143,7 @@ export default function App() {
                 alignItems: "center",
               }}
             >
-              {!file ? (
+              {!postPic ? (
                 <Pressable onPress={pickImage} style={{ alignItems: "center" }}>
                   <EvilIcons name="plus" size={150} color="#0D98BA" />
                   <Text style={{ color: "gray", fontWeight: "400" }}>
@@ -136,7 +156,7 @@ export default function App() {
                 >
                   <Pressable
                     onPress={() => {
-                      setFile(null);
+                      setPostPic(null);
                     }}
                     style={{
                       position:'absolute',
@@ -152,7 +172,7 @@ export default function App() {
                   </Pressable>
                   <Image
                     style={{ height: "100%", width: "100%", borderRadius: 12 ,position: "relative" }}
-                    source={{ uri: file }}
+                    source={{ uri: postPic }}
                   />
                 </View>
               )}
@@ -161,6 +181,8 @@ export default function App() {
               <TextInput
                 onFocus={() => setShowPlaceholder(false)}
                 onChangeText={(value) => setPostMsg(value)}
+               // multiline={true}
+                value={postMsg}
                 style={{
                   height: moderateScale(100),
                   width: "100%",
@@ -198,12 +220,13 @@ export default function App() {
           }}
         >
           <Button
-            label={"Get Started"}
+            label={"Post Update"}
             style={{
               left: "center",
               right: "center",
               bottom: moderateScale(0),
             }}
+            onPress={handlePostUpdate}
           />
         </View>
       ) : (

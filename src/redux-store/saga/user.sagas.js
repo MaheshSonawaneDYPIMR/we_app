@@ -20,6 +20,22 @@ function* getCurrentUser(action) {
     }
 }
 
+function* postUpdate(action) {
+  try {
+    console.log("postUpdate sagas action:", action.payload);
+    const response = yield Axios.post(`https://weapp-backend.onrender.com/api/v1/post`,action.payload)
+    console.log("postUpdate sagas response:", response.data);
+    yield put(getCurrentUserSuccess(response.data.data));
+  } catch (error) {
+    console.log("postUpdate sagas response error:", error)
+    yield put(getCurrentUserFailure(error.message));
+  }
+}
+
 export default function* watchUser() {
   yield takeEvery(GET_CURRENT_USER_REQUEST, getCurrentUser);
+}
+
+export function* watchPostUpdate() {
+  yield takeEvery("POST_UPDATE_REQUEST", postUpdate);
 }
