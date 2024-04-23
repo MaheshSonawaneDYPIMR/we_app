@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useEffect } from "react";
 
+
 const ProfileScreen = () => {
   const [showComments, setShowComments] = useState(false)
   const [profileData, setProfileData] = useState({
