@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   registerRequest,
   registerFailure,
-} from "../../redux-store/actions/user.actions.js";
+} from "../../redux-store/actions/auth.actions.js";
 
 import {
   validateEmail,
@@ -30,7 +30,6 @@ import { LoadingSpinner } from "../../components/LoadingSpinner.js";
 import { AlertBox } from "../../components/AlertBox.js";
 
 const SignOut = () => {
-
   const navigation = useNavigation();
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isUsernameFocused, setIsUsernameFocused] = useState(false);
@@ -43,7 +42,6 @@ const SignOut = () => {
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const { user, error, isLoading } = useSelector((state) => state.auth);
- 
 
   const dispatch = useDispatch();
 
@@ -57,7 +55,7 @@ const SignOut = () => {
 
   console.log("user", user, "error", error, "isLoding", isLoading);
 
-  const handleSignOut =(email, username, password) => {
+  const handleSignOut = (email, username, password) => {
     try {
       const usernameError = validateUsername(username);
       const passwordError = validatePassword(password);
@@ -77,7 +75,6 @@ const SignOut = () => {
           username
         );
         dispatch(registerRequest(email, username, password));
-       
       }
     } catch (error) {
       console.log("handleSignOut error: " + error);
@@ -85,18 +82,20 @@ const SignOut = () => {
     }
   };
 
-
-  useEffect(()=>{
-
-    if (error ==="Request failed with status code 500"){
-
-      return AlertBox("Register Failed","Something went wrong while creating user");
-     }
-    if (error ==="Request failed with status code 404"){
-      return AlertBox("unexpected error","something went wrong please try again later after some time.");
-     }
-  },[error])
-  
+  useEffect(() => {
+    if (error === "Request failed with status code 500") {
+      return AlertBox(
+        "Register Failed",
+        "Something went wrong while creating user"
+      );
+    }
+    if (error === "Request failed with status code 404") {
+      return AlertBox(
+        "unexpected error",
+        "something went wrong please try again later after some time."
+      );
+    }
+  }, [error]);
 
   if (isLoading) {
     return (
@@ -108,15 +107,14 @@ const SignOut = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
-      <View style={{ margin: moderateScale(20), marginTop: moderateScale(70) }}>
-       
-          <View>
-            <Text style={{ fontSize: 24, fontWeight: "500" }}>Hi there!</Text>
-            <Text style={{ fontSize: 16, fontWeight: "400", color: "#A4A4A4" }}>
-              Welcome back, Sign in to your account
-            </Text>
-          </View>
-          <KeyboardAvoidingView>
+      <View style={{ margin: moderateScale(20), marginTop: moderateScale(70),flex:1,justifyContent:'space-between' }}>
+        <View>
+          <Text style={{ fontSize: 24, fontWeight: "500" }}>Hi there!</Text>
+          <Text style={{ fontSize: 16, fontWeight: "400", color: "#2C3539" }}>
+            Welcome back, Sign in to your account
+          </Text>
+        </View>
+        <KeyboardAvoidingView>
           <View style={{ marginTop: moderateScale(30) }}>
             <View>
               <View
@@ -129,8 +127,8 @@ const SignOut = () => {
                     alignItems: "center",
                     backgroundColor: "#F9FAFB",
                     borderRadius: 14,
-                    
-                    marginTop:moderateScale(10),
+
+                    marginTop: moderateScale(10),
                   },
                   isUsernameFocused && {
                     borderWidth: 0.8,
@@ -139,12 +137,12 @@ const SignOut = () => {
                   usernameError && {
                     borderWidth: 0.8,
                     borderColor: "red",
-                    marginTop:moderateScale(1)
+                    marginTop: moderateScale(1),
                   },
                   error === "Request failed with status code 408" && {
                     borderWidth: 0.8,
                     borderColor: "red",
-                    marginTop:moderateScale(1)
+                    marginTop: moderateScale(1),
                   },
                 ]}
               >
@@ -197,10 +195,26 @@ const SignOut = () => {
                 </View>
               </View>
               {usernameError ? (
-                <Text style={{ color: "red", marginLeft:moderateScale(9),fontSize:12}}>{usernameError}</Text>
+                <Text
+                  style={{
+                    color: "red",
+                    marginLeft: moderateScale(9),
+                    fontSize: 12,
+                  }}
+                >
+                  {usernameError}
+                </Text>
               ) : null}
               {error === "Request failed with status code 408" ? (
-                <Text style={{ color: "red", marginLeft:moderateScale(9),fontSize:12}}>username already in use</Text>
+                <Text
+                  style={{
+                    color: "red",
+                    marginLeft: moderateScale(9),
+                    fontSize: 12,
+                  }}
+                >
+                  username already in use
+                </Text>
               ) : null}
             </View>
             <View>
@@ -214,8 +228,8 @@ const SignOut = () => {
                     alignItems: "center",
                     backgroundColor: "#F9FAFB",
                     borderRadius: 14,
-                    
-                    marginTop:moderateScale(10),
+
+                    marginTop: moderateScale(10),
                   },
                   isEmailFocused && {
                     borderWidth: 0.8,
@@ -224,13 +238,12 @@ const SignOut = () => {
                   emailError && {
                     borderWidth: 0.8,
                     borderColor: "red",
-                    marginTop:moderateScale(1)
-
+                    marginTop: moderateScale(1),
                   },
                   error === "Request failed with status code 409" && {
                     borderWidth: 0.8,
                     borderColor: "red",
-                    marginTop:moderateScale(1)
+                    marginTop: moderateScale(1),
                   },
                 ]}
               >
@@ -283,11 +296,27 @@ const SignOut = () => {
                 </View>
               </View>
               {emailError ? (
-                <Text style={{ color: "red", marginLeft:moderateScale(9),fontSize:12}}>{emailError}</Text>
+                <Text
+                  style={{
+                    color: "red",
+                    marginLeft: moderateScale(9),
+                    fontSize: 12,
+                  }}
+                >
+                  {emailError}
+                </Text>
               ) : null}
 
               {error === "Request failed with status code 409" ? (
-                <Text style={{ color: "red", marginLeft:moderateScale(9),fontSize:12}}>email already in use</Text>
+                <Text
+                  style={{
+                    color: "red",
+                    marginLeft: moderateScale(9),
+                    fontSize: 12,
+                  }}
+                >
+                  email already in use
+                </Text>
               ) : null}
             </View>
             <View>
@@ -301,8 +330,8 @@ const SignOut = () => {
                     alignItems: "center",
                     backgroundColor: "#F9FAFB",
                     borderRadius: 14,
-                  
-                    marginTop:moderateScale(10),
+
+                    marginTop: moderateScale(10),
                   },
                   isPasswordFocused && {
                     borderWidth: 0.8,
@@ -310,7 +339,7 @@ const SignOut = () => {
                   },
                   passwordError && {
                     borderWidth: 0.8,
-                    marginTop:moderateScale(1),
+                    marginTop: moderateScale(1),
                     borderColor: "red",
                   },
                 ]}
@@ -376,11 +405,20 @@ const SignOut = () => {
                 </Pressable>
               </View>
               {passwordError ? (
-                <Text style={{ color: "red", marginLeft:moderateScale(9),fontSize:12}}>{passwordError}</Text>
+                <Text
+                  style={{
+                    color: "red",
+                    marginLeft: moderateScale(9),
+                    fontSize: 12,
+                  }}
+                >
+                  {passwordError}
+                </Text>
               ) : null}
             </View>
           </View>
-          <View style={{marginTop:moderateScale(10)}}>
+          
+          <View style={{ marginTop: moderateScale(10) }}>
             <Text style={{ fontSize: 16, fontWeight: "600" }}>
               Forgot Password?
             </Text>
@@ -391,15 +429,12 @@ const SignOut = () => {
               onPress={() => handleSignOut(email, username, password)}
             />
           </View>
-        </KeyboardAvoidingView>
-        <View>
-          <View>
-            <View
+          <View 
               style={{
                 flexDirection: "row",
                 justifyContent: "center",
                 alignItems: "center",
-                marginVertical: moderateScale(40),
+               marginVertical:moderateScale(20)
               }}
             >
               <View
@@ -424,6 +459,10 @@ const SignOut = () => {
                 }}
               />
             </View>
+        </KeyboardAvoidingView>
+        
+         
+          
             <View style={{ flexDirection: "row" }}>
               <Pressable
                 onPress={handleGooglePressed}
@@ -456,7 +495,7 @@ const SignOut = () => {
                 <FontAwesome6 name="meta" size={34} color="black" />
               </Pressable>
             </View>
-          </View>
+         
           <Pressable
             onPress={() => navigation.navigate("SignIn")}
             style={{
@@ -464,7 +503,7 @@ const SignOut = () => {
               alignSelf: "center",
               justifyContent: "center",
               alignItems: "center",
-              marginTop: moderateScale(40),
+              marginBottom:moderateScale(50)
             }}
           >
             <Text style={{ fontSize: 14, fontWeight: "600", color: "#a4a4a4" }}>
@@ -475,7 +514,7 @@ const SignOut = () => {
             </Text>
           </Pressable>
         </View>
-      </View>
+      
     </SafeAreaView>
   );
 };

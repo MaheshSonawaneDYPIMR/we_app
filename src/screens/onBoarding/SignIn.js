@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   loginRequest,
   loginFailure,
-} from "../../redux-store/actions/user.actions.js";
+} from "../../redux-store/actions/auth.actions.js";
 import {
   validateEmail,
   validateUsername,
@@ -38,19 +38,21 @@ const SignIn = () => {
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [isCursorVisible, setIsCursorVisible] = useState(true);
- let { user, error, isLoading } = useSelector((state) => state.auth);
 
+  let { user, error, isLoading } = useSelector((state) => state.auth);
+  
   const dispatch = useDispatch();
 
-  const createTwoButtonAlert = (title,msg,navigation=navigation) =>
-  Alert.alert(title, msg, [
-    {
-      text: 'ok',
-      onPress: () => {handleOkPress},
-      style: 'default',
-    },
-    
-  ]);
+  const createTwoButtonAlert = (title, msg, navigation = navigation) =>
+    Alert.alert(title, msg, [
+      {
+        text: "ok",
+        onPress: () => {
+          handleOkPress;
+        },
+        style: "default",
+      },
+    ]);
 
   const handleOkPress = () => {
     error = null; // Clear the error message
@@ -68,47 +70,66 @@ const SignIn = () => {
     try {
       const passwordError = validatePassword(password);
       const emailError = validateEmail(email);
-
+      
       setPasswordError(passwordError);
       setEmailError(emailError);
       console.log(passwordError, emailError);
       if (!passwordError && !emailError) {
         console.log("email:", email, "password:", password);
-        dispatch(loginRequest(email, password));
+       dispatch(loginRequest(email, password));
+       
       }
     } catch (err) {
       console.log("handleSignIn error: " + err);
-      dispatch(loginFailure(err));
+     dispatch(loginFailure(err));
     }
   };
 
-  console.log(error, isLoading);
+  console.log(error, isLoading, user);
 
- 
-useEffect(()=>{
-  if (error ==="Request failed with status code 401"){
-    return createTwoButtonAlert("Login Failed","Invalid user credentials please check your email and password.");
-   }
-  if (error ==="Request failed with status code 404"){
-    return createTwoButtonAlert("unexpected error","something went wrong please try again later after some time.");
-   }
-},[error])
+  useEffect(() => {
+    if (error === "Request failed with status code 401") {
+      return createTwoButtonAlert(
+        "Login Failed",
+        "Invalid user credentials please check your email and password."
+      );
+    }
+    if (error === "Request failed with status code 404") {
+      return createTwoButtonAlert(
+        "unexpected error",
+        "something went wrong please try again later after some time."
+      );
+    }
+    if (user) {
+      navigation.replace("MainStackNav");
+    }
+  }, [error, user]);
 
-
-  
-if (isLoading) {
-  return <LoadingSpinner />;
-}
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
   return (
-    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
-      <View style={{ margin: moderateScale(20), marginTop: moderateScale(70) }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#ffffff",
+      }}
+    >
+      <View
+        style={{
+          margin: moderateScale(20),
+          marginTop: moderateScale(70),
+          justifyContent: "space-between",
+          flex: 1,
+        }}
+      >
+        <View>
+          <Text style={{ fontSize: 24, fontWeight: "500" }}>Hi there!</Text>
+          <Text style={{ fontSize: 16, fontWeight: "400", color: "#2C3539" }}>
+            Welcome back, Sign in to your account
+          </Text>
+        </View>
         <KeyboardAvoidingView>
-          <View>
-            <Text style={{ fontSize: 24, fontWeight: "500" }}>Hi there!</Text>
-            <Text style={{ fontSize: 16, fontWeight: "400", color: "#A4A4A4" }}>
-              Welcome back, Sign in to your account
-            </Text>
-          </View>
           <View style={{ marginTop: moderateScale(40) }}>
             <View>
               <View
@@ -300,90 +321,86 @@ if (isLoading) {
               onPress={() => handleSignIn(email, password)}
             />
           </View>
-        </KeyboardAvoidingView>
-        <View>
-          <View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                marginVertical: moderateScale(40),
-              }}
-            >
-              <View
-                style={{
-                  borderWidth: 0.3,
-                  height: moderateScale(0.2),
-                  flex: 1,
-                  borderColor: "#c2c2c2",
-                }}
-              />
-              <Text
-                style={{ fontSize: 16, fontWeight: "600", color: "#c2c2c2" }}
-              >
-                OR
-              </Text>
-              <View
-                style={{
-                  borderWidth: 0.3,
-                  height: moderateScale(0.2),
-                  flex: 1,
-                  borderColor: "#c2c2c2",
-                }}
-              />
-            </View>
-            <View style={{ flexDirection: "row" }}>
-              <Pressable
-                onPress={handleGooglePressed}
-                style={{
-                  height: moderateScale(55),
-                  flex: 1,
-                  marginRight: moderateScale(20),
-                  borderWidth: 0.8,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 14,
-                  borderColor: "#c2c2c2",
-                }}
-              >
-                <AntDesign name="google" size={34} color="black" />
-              </Pressable>
-              <Pressable
-                onPress={handleMetaPressed}
-                style={{
-                  height: moderateScale(55),
-                  flex: 1,
-
-                  borderWidth: 0.8,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 14,
-                  borderColor: "#c2c2c2",
-                }}
-              >
-                <FontAwesome6 name="meta" size={34} color="black" />
-              </Pressable>
-            </View>
-          </View>
-          <Pressable
-            onPress={() => navigation.navigate("SignOut")}
+          <View
             style={{
               flexDirection: "row",
-              alignSelf: "center",
               justifyContent: "center",
               alignItems: "center",
-              marginTop: moderateScale(40),
+              margin: moderateScale(20),
             }}
           >
-            <Text style={{ fontSize: 14, fontWeight: "600", color: "#a4a4a4" }}>
-              Don’t have an account?
+            <View
+              style={{
+                borderWidth: 0.3,
+                height: moderateScale(0.2),
+                flex: 1,
+                borderColor: "#c2c2c2",
+              }}
+            />
+            <Text style={{ fontSize: 16, fontWeight: "600", color: "#c2c2c2" }}>
+              OR
             </Text>
-            <Text style={{ fontSize: 14, fontWeight: "600", color: "#000000" }}>
-              Sign out
-            </Text>
+            <View
+              style={{
+                borderWidth: 0.3,
+                height: moderateScale(0.2),
+                flex: 1,
+                borderColor: "#c2c2c2",
+              }}
+            />
+          </View>
+        </KeyboardAvoidingView>
+
+        <View style={{ flexDirection: "row" }}>
+          <Pressable
+            onPress={handleGooglePressed}
+            style={{
+              height: moderateScale(55),
+              flex: 1,
+              marginRight: moderateScale(20),
+              borderWidth: 0.8,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 14,
+              borderColor: "#c2c2c2",
+            }}
+          >
+            <AntDesign name="google" size={34} color="black" />
+          </Pressable>
+          <Pressable
+            onPress={handleMetaPressed}
+            style={{
+              height: moderateScale(55),
+              flex: 1,
+
+              borderWidth: 0.8,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 14,
+              borderColor: "#c2c2c2",
+            }}
+          >
+            <FontAwesome6 name="meta" size={34} color="black" />
           </Pressable>
         </View>
+
+        <Pressable
+          onPress={() => navigation.navigate("SignOut")}
+          style={{
+            flexDirection: "row",
+            alignSelf: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom:moderateScale(50)
+          }}
+        >
+          <Text style={{ fontSize: 14, fontWeight: "600", color: "#a4a4a4" }}>
+            Don’t have an account?
+          </Text>
+          <Text style={{ fontSize: 14, fontWeight: "600", color: "#000000" }}>
+            Sign out
+          </Text>
+        </Pressable>
       </View>
     </View>
   );

@@ -1,0 +1,51 @@
+# Ignore node_modules directory
+node_modules
+
+# Ignore Expo cache and related files
+.expo
+.cache
+.expo-shared
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Ignore any compiled or built files
+*.log
+*.gz
+*.tgz
+*.zip
+*.rar
+*.tar
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.aab
+*.apk
+*.ipa
+*.xcarchive
+*.xcworkspace
+*.xcuserstate
+*.xccheckout
+*.lock
+*.env
+
+# Ignore VSCode settings
+.vscode
+
+# Ignore Android build directories
+android/build
+android/app/build
+
+# Ignore iOS build directories
+ios/build
+ios/Pods
+ios/*.xcworkspace
+ios/*.xcuserdatad
+
+# Ignore any local or temporary files
+.DS_Store
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
