@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet,Text } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
 
-const LoadingSpinner = () => {
+const LoadingSpinner = (props) => {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="extra-large" color="#0000ff" />
+      <ActivityIndicator size="extra-large" color="#0D98BA" />
+      <Text style={{fontSize:16,fontWeight:'500',color:"#0D98BA",marginTop:moderateScale(20)}}>({props.text})</Text>
     </View>
   );
 };

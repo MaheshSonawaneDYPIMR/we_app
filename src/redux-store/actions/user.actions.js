@@ -6,6 +6,7 @@ import {
   POST_UPDATE_FAILURE,
   POST_UPDATE_REQUEST,
   POST_UPDATE_SUCCESS,
+  CHANGE_POST_UPDATED_STATE
 } from "../constants/user.constants";
 
 export const getCurrentUserFailure = (error) => ({
@@ -27,11 +28,17 @@ export const postUpdateFailure = (error) => ({
   payload: error,
 });
 
-export const postUpdateRequest = () => ({
+export const postUpdateRequest = (formData) => ({
   type: POST_UPDATE_REQUEST,
+  payload:formData,
 });
 
-export const postUpdateSuccess = (postMsg , postPic) => ({
+export const postUpdateSuccess = () => ({
   type: POST_UPDATE_SUCCESS,
-  payload:{postMsg, postPic},
+ 
+});
+
+export const changePostUpdatedState = () => ({
+  type: CHANGE_POST_UPDATED_STATE,
+ 
 });

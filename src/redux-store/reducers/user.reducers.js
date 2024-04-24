@@ -1,4 +1,5 @@
 import {
+  CHANGE_POST_UPDATED_STATE,
   GET_CURRENT_USER_FAILURE,
   GET_CURRENT_USER_REQUEST,
   GET_CURRENT_USER_SUCCESS,
@@ -11,6 +12,7 @@ const initialState = {
   user: null,
   error: null,
   isLoading: false,
+  isPostUpdated: false,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -42,6 +44,8 @@ const userReducer = (state = initialState, action) => {
         ...state,
         isLoading: true,
         error: null,
+        isPostUpdated: false,
+       
       };
     }
     case POST_UPDATE_SUCCESS: {
@@ -49,16 +53,24 @@ const userReducer = (state = initialState, action) => {
         ...state,
 
         isLoading: false,
+        isPostUpdated: true,
         error: null,
       };
     }
     case POST_UPDATE_FAILURE: {
       return {
         ...state,
-
+        
         isLoading: false,
         error: action.payload,
       };
+    }
+
+    case CHANGE_POST_UPDATED_STATE:{
+      return{
+       ...state,
+        isPostUpdated: false,
+      }
     }
 
     default: {

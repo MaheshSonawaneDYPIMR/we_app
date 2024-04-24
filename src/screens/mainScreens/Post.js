@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Alert,
   Keyboard,
-  Platform
+  Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { TextInput } from "react-native";
@@ -16,8 +16,25 @@ import { EvilIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../../components/Button";
-import { useSelector,useDispatch } from "react-redux";
-import { postUpdateFailure,postUpdateRequest } from "../../redux-store/actions/user.actions";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  postUpdateFailure,
+  postUpdateRequest,
+  changePostUpdatedState
+} from "../../redux-store/actions/user.actions";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
+const options = {
+  title: "Select Image",
+  type: "library",
+  options: {
+    mediaType: "photo",
+    quality: 0.5,
+    maxWidth: 500,
+    maxHeight: 500,
+    selectionLimit: 1,
+    includeBase64: false,
+  },
+};
 
 export default function App() {
   const navigation = useNavigation();
@@ -26,26 +43,32 @@ export default function App() {
   const [showPlaceholder, setShowPlaceholder] = useState(true);
   const [postMsg, setPostMsg] = useState("");
   // Stores any error message
-  const [error,setError] = useState(false);
- 
+  const [resultForFormdata, setResultForFormData] = useState();
   const dispatch = useDispatch();
-  
+  const formData = new FormData();
+  const {error , isLoading ,isPostUpdated} = useSelector((state)=>state.user)
+  console.log('error: ', error ,'isPostUpdated:',isPostUpdated, 'isLoading: ', isLoading)
+
   const handlePostUpdate = async () => {
     try {
-     console.log("postMasg",postMsg ,"postPic",postPic);
-     setPostMsg("")
-     setPostPic("")
-    
+      formData.append("postPic", {
+        uri: resultForFormdata.assets[0].uri,
+        type: resultForFormdata.assets[0].mimeType,
+        name: resultForFormdata.assets[0].fileName,
+        size: resultForFormdata.assets[0].fileSize,
+      });
+      formData.append("postMsg", postMsg);
+
+      dispatch(postUpdateRequest(formData));
+
+      setPostMsg("");
+      setPostPic("");
     } catch (error) {
-      console.log("error while posting update",error);
-     
+      // Handle error appropriately, e.g., dispatch an action to update Redux store with error
+      dispatch(postUpdateFailure("Error posting update"));
+      console.log("Error while posting update", error);
     }
-   
-  }
-
-  console.log("postMasg",postMsg ,"postPic",postPic);
-
-
+  };
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -60,15 +83,16 @@ export default function App() {
     } else {
       // Launch the image library and get
       // the selected image
-      const result = await ImagePicker.launchImageLibraryAsync();
+      const result = await ImagePicker.launchImageLibraryAsync(options);
 
       if (!result.canceled) {
         // If an image is selected (not cancelled),
         // update the postPic state variable
+        setResultForFormData(result);
+        console.log("resultForFormdata", resultForFormdata);
         setPostPic(result.assets[0].uri);
-        console.log("Image selected", result.assets[0].uri);
-        // Clear any previous errors
-        setError(null);
+
+    
       }
     }
   };
@@ -91,6 +115,14 @@ export default function App() {
     };
   }, []);
 
+   if (isLoading) {
+    return <LoadingSpinner text={"Posting Update..."}/>;
+  }
+
+  if(isPostUpdated){
+    dispatch(changePostUpdatedState())
+    navigation.navigate("Feed");
+  }
 
   return (
     <View style={{ backgroundColor: "#ecf3f9", flex: 1 }}>
@@ -159,8 +191,8 @@ export default function App() {
                       setPostPic(null);
                     }}
                     style={{
-                      position:'absolute',
-                      zIndex:1,
+                      position: "absolute",
+                      zIndex: 1,
                       right: 8,
                       top: 8,
                       backgroundColor: "#ffffff",
@@ -171,7 +203,12 @@ export default function App() {
                     <Entypo name="cross" size={28} color="black" />
                   </Pressable>
                   <Image
-                    style={{ height: "100%", width: "100%", borderRadius: 12 ,position: "relative" }}
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      borderRadius: 12,
+                      position: "relative",
+                    }}
                     source={{ uri: postPic }}
                   />
                 </View>
@@ -181,7 +218,7 @@ export default function App() {
               <TextInput
                 onFocus={() => setShowPlaceholder(false)}
                 onChangeText={(value) => setPostMsg(value)}
-               // multiline={true}
+                // multiline={true}
                 value={postMsg}
                 style={{
                   height: moderateScale(100),
@@ -226,7 +263,7 @@ export default function App() {
               right: "center",
               bottom: moderateScale(0),
             }}
-            onPress={handlePostUpdate}
+            onPress={() => handlePostUpdate(postMsg, postPic)}
           />
         </View>
       ) : (
